@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#%h)4nh0n*rp)3n*+lfs(^#$nf!imp-q&ko7&uqe$2ogpg51ql'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True,
@@ -102,7 +102,7 @@ WSGI_APPLICATION = 'languagegames.wsgi.application'
 #         'ENGINE': 'django.db.backends.postgresql',
 #         'NAME': 'lang_games',
 #         'USER': 'postgres',
-#         'PASSWORD': 'vbnhfyjv0773',
+#         'PASSWORD': '',
 #         'HOST': '127.0.0.1',
 #         'PORT': '5432',
 #     }
