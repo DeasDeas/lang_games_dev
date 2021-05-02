@@ -1,45 +1,38 @@
 from rest_framework import serializers
-from lgback.models import Picture, Set, Session, Theme, SessionInstance, PictureGameResult
+from lgback.models import PictureItem, Set, Item, Theme
 from django.contrib.auth.models import User
 
 
-class PictureSerializer(serializers.ModelSerializer):
+class PictureItemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Picture
-        fields = ['id', 'src', 'word', 'pos', 'set', 'theme', 'owner']
+        model = PictureItem
+        fields = "__all__"
+        read_only_fields = ['id', 'owner', 'date_created', 'date_redacted']
 
 
-class SessionSerializer(serializers.ModelSerializer):
+class ItemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Session
-        fields = ['id', 'name', 'owner', 'private']
+        model = Item
+        fields = "__all__"
+        read_only_fields = ['id', 'owner', 'date_created', 'date_redacted']
 
 
 class ThemeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Theme
-        fields = ['id', 'name', 'owner']
-
-
-class SessionInstanceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SessionInstance
-        fields = ['id', 'user', 'session', 'status']
-
-
-class PictureGameResultSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PictureGameResult
-        fields = ['session_instance', 'set', 'picture', 'correct']
+        fields = "__all__"
+        read_only_fields = ['id', 'owner', 'date_created', 'date_redacted']
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username']
+        fields = "__all__"
 
 
 class SetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Set
-        fields = ['id', 'name', 'max_size', 'theme', 'session', 'owner', 'repeatable']
+        fields = "__all__"
+        read_only_fields = ['id', 'owner', 'date_created', 'date_redacted']
+

@@ -1,29 +1,40 @@
+from datetime import datetime
 from django.db import models
-import uuid  # Required for unique indexes
+import uuid
 from django.contrib.auth.models import User
 
 
-class Session(models.Model):
+class Item(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     name = models.CharField(max_length=30, null=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     private = models.BooleanField(default=True)
+    description = models.TextField()
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    date_created = models.DateTimeField(default=datetime.now())
+    date_redacted = models.DateTimeField(auto_now=datetime.now())
+
+    class Meta:
+        ordering = ['date_created']
 
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.id} ({self.name})'
 
 
-class Picture(models.Model):
+class PictureItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     src = models.TextField()
     word = models.CharField(max_length=200, default='some_word')
-    pos = models.IntegerField(default=0)
+    pos_picture = models.IntegerField(default=0)
+    pos_word = models.IntegerField(default=0)
     set = models.ForeignKey('Set', on_delete=models.CASCADE)
     theme = models.ForeignKey('Theme', on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    date_created = models.DateTimeField(default=datetime.now())
+    date_redacted = models.DateTimeField(auto_now=datetime.now())
 
     class Meta:
-        ordering = ['set_id', 'pos']
+        ordering = ['date_created']
 
     def __str__(self):
         """String for representing the Model object."""
@@ -32,15 +43,18 @@ class Picture(models.Model):
 
 class Set(models.Model):
     id = models.AutoField(primary_key=True)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, null=True, blank=True)
-    max_size = models.IntegerField(default=9, null=True)
+    max_size = models.IntegerField(default=12, null=True)
     theme = models.ForeignKey('Theme', on_delete=models.CASCADE)
-    session = models.ForeignKey(Session, on_delete=models.CASCADE)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     repeatable = models.IntegerField(default=0)
+    pos = models.IntegerField(default=0)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    date_created = models.DateTimeField(default=datetime.now())
+    date_redacted = models.DateTimeField(auto_now=datetime.now())
 
     class Meta:
-        ordering = ['id']
+        ordering = ['date_created']
 
     def __str__(self):
         """String for representing the Model object."""
@@ -51,46 +65,13 @@ class Theme(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30, null=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    date_created = models.DateTimeField(default=datetime.now())
+    date_redacted = models.DateTimeField(auto_now=datetime.now())
 
     class Meta:
-        ordering = ['name']
+        ordering = ['date_created']
 
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.id} ({self.name})'
 
-
-class SessionInstance(models.Model):
-    id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    session = models.ForeignKey(Session, on_delete=models.CASCADE)
-
-    STATUS_CHOICES = (
-        (1, "New"),
-        (2, "In progress"),
-        (3, "Completed"),
-        (4, "Done")
-    )
-
-    status = models.IntegerField(choices=STATUS_CHOICES, default=1)
-
-    class Meta:
-        ordering: ['status']
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return f'instance: {self.id}'
-
-
-class PictureGameResult(models.Model):
-    session_instance = models.ForeignKey(Session, on_delete=models.CASCADE)
-    set = models.ForeignKey(Set, on_delete=models.CASCADE)
-    picture = models.ForeignKey(Picture, on_delete=models.CASCADE, default=None)
-    correct = models.BooleanField(null=True)
-
-    class Meta:
-        ordering: ['session_instance']
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return f'{self.id} session_instance: {self.session_instance_id}'

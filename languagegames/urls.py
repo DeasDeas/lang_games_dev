@@ -20,7 +20,6 @@ from lgback import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('lgback.urls')),
-    path('auth/', include('rest_framework.urls')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
 ]

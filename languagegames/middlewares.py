@@ -18,7 +18,6 @@ class MoveJWTCookieIntoTheBody(MiddlewareMixin):
 
     def process_view(self, request, view_func, *view_args, **view_kwargs):
         if request.path == '/dj-rest-auth/token/verify/' and settings.JWT_AUTH_COOKIE in request.COOKIES:
-
             if request.body != b'':
                 data = json.loads(request.body)
                 data['token'] = request.COOKIES[settings.JWT_AUTH_COOKIE]

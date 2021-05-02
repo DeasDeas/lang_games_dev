@@ -4,6 +4,7 @@ dj-rest-auth
 django-allauth
 djangorestframework
 djangorestframework-simplejwt
-django-filter
 django-cors-headers
 gunicorn
+django-filter
+djangorestframework-filters=1.0.0.dev
